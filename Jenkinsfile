@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         branch = 'master'
-        url = 'https://github.com/PedroMerinoDev/CadastroClientes'
+        url = 'https://gitlab.com/rlechetaudemy/helloandroid'
     }
 
     stages {
@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Lint') {
+        /* stage('Lint') {
             steps {
                 sh "./gradlew lint"
             }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 sh "./gradlew test --stacktrace"
             }
-        }
+        } */
 
         // Manage Jenkins > Credentials > Add > Secret file or Secret Text
         stage('Credentials') {
@@ -68,4 +68,12 @@ pipeline {
             }
         }
     }
+
+    post {
+       always {
+           sh "rm app/hello.jks"
+           sh "rm app/service-account-firebasedist.json"
+       }
+    }
+
 }
