@@ -9,7 +9,7 @@ pipeline {
 
     environment {
         branch = 'master'
-        url = 'https://gitlab.com/rlechetaudemy/helloandroid'
+        url = 'https://github.com/PedroMerinoDev/CadastroClientes'
     }
 
     stages {
