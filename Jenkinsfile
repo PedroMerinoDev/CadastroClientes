@@ -12,6 +12,16 @@ pipeline {
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
     }
 
+     stage("Fix the permission issue") {
+
+                agent any
+
+                steps {
+                    sh "sudo chown root:jenkins /run/docker.sock"
+                }
+
+            }
+
     stages {
 
         stage('Checkout git') {
@@ -48,7 +58,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "sudo ./gradlew clean bundleRelease"
+                sh "./gradlew clean bundleRelease"
+                args '-u root:sudo -v $HOME/workspace/myproject:/myproject'
             }
         }
 
