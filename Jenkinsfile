@@ -3,6 +3,7 @@ pipeline {
     agent {
         docker {
             image 'androidsdk/android-30'
+            args '-u root:sudo -v $HOME/workspace/myproject:/myproject'
         }
     }
     /* agent { label 'mac' } */
@@ -12,15 +13,6 @@ pipeline {
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
     }
 
-     stage("Fix the permission issue") {
-
-                agent any
-
-                steps {
-                    sh "sudo chown root:jenkins /run/docker.sock"
-                }
-
-            }
 
     stages {
 
