@@ -1,0 +1,87 @@
+plugins {
+    id 'com.android.application'
+    id 'com.github.triplet.play'
+    id 'com.google.firebase.appdistribution'
+}
+
+def keystorePropertiesFile = rootProject.file("app/keystore.properties")
+
+def keystoreProperties = new Properties()
+
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+    namespace 'com.msd.cadastroclientes'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.msd.cadastroclientes"
+        minSdk 21
+        targetSdk 33
+        versionCode 7
+        versionName "7.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+
+    buildTypes {
+
+        debug{
+            def url = System.getenv("BASE_URL") ?:  urlServer
+
+            buildConfigField "String", "BASE_URL", '"' + url +'"'
+        }
+
+        release {
+            buildConfigField "String", "BASE_URL", '"https://google.com"'
+
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+
+            firebaseAppDistribution {
+                //pode ser escondida com variaveis de ambinete System.getenv
+                appId="1:785180205939:android:bdd2269311b134978c1b06"
+                releaseNotesFile="app/releasenotes.txt"
+                groups="Testers"
+                artifactType="APK"
+                serviceCredentialsFile="app/service-account-firebasedist.json"
+                //testers="amandamaria.contato@gmail.com, pedrinhomerino@gmail.com, phenohunt.app@gmail.com"
+                //apkPath="app/release/app-release.aab"
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+play {
+    serviceAccountCredentials.set(file("service-account.json"))
+}
+
+dependencies {
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.navigation:navigation-fragment:2.5.3'
+    implementation 'androidx.navigation:navigation-ui:2.5.3'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
