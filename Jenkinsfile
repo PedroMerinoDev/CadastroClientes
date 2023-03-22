@@ -63,7 +63,7 @@ pipeline {
 
                 stage('Google Play...') {
                     steps {
-                        sh "echo 'Test...'"
+                        sh "./gradlew publishBundle"
                     }
                 }
             }
