@@ -1,4 +1,6 @@
-agent {
+pipeline {
+
+    agent {
         docker {
             image 'androidsdk/android-30'
         }
@@ -46,8 +48,7 @@ agent {
 
         stage('Build') {
             steps {
-                //sh "./gradlew clean assembleRelease"
-                sh "echo 'Test...'"
+                sh "./gradlew clean assembleRelease"
             }
         }
 
@@ -55,8 +56,7 @@ agent {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                        //sh "./gradlew appDistributionUploadRelease"
-                        sh "echo 'Test...'"
+                        sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 
@@ -75,3 +75,4 @@ agent {
            sh "rm app/service-account-firebasedist.json"
        }
     }
+}
