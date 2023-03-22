@@ -78,6 +78,7 @@ pipeline {
        always {
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
+           sh "rm app/service-account.json"
        }
     }
 }
