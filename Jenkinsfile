@@ -60,13 +60,13 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                        sh "echo teste"//sh "./gradlew appDistributionUploadRelease"
+                       sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 
                 stage('Google Play...') {
                     steps {
-                        sh "echo teste"//sh "./gradlew publishBundle"
+                        sh "./gradlew publishBundle"
                     }
                 }
             }
