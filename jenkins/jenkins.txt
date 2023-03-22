@@ -21,8 +21,10 @@ sudo chmod -R 777 /var/run/docker.sock
 3) Criar o arquivo docker-compose.yaml
 
 4) Subindo o Jenkins
-docker pull
+sudo docker pull androidsdk/android-30
 docker-compose up
+ou
+docker-compose up -d
 
 5) Configurando o Jenkins
 
