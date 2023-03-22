@@ -32,6 +32,7 @@ pipeline {
             }
         } */
 
+
         // Manage Jenkins > Credentials > Add > Secret file or Secret Text
         stage('Credentials') {
             steps {
@@ -48,7 +49,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "echo 'Test...'" //sh "./gradlew clean assembleRelease"
+                 sh "./gradlew clean assembleRelease"
             }
         }
 
@@ -56,7 +57,7 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                        sh "echo 'Test...'" //sh "./gradlew appDistributionUploadRelease"
+                       sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 

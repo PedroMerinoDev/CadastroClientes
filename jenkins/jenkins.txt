@@ -21,7 +21,7 @@ sudo chmod -R 777 /var/run/docker.sock
 3) Criar o arquivo docker-compose.yaml
 
 4) Subindo o Jenkins
-
+docker pull
 docker-compose up
 
 5) Configurando o Jenkins
