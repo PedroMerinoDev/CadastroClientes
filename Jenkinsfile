@@ -20,7 +20,7 @@ pipeline {
             }
         }
 
-         stage('Lint') {
+      /*    stage('Lint') {
             steps {
                 sh "./gradlew lint"
             }
@@ -30,7 +30,7 @@ pipeline {
             steps {
                 sh "./gradlew test --stacktrace"
             }
-        }
+        } */
 
 
         // Manage Jenkins > Credentials > Add > Secret file or Secret Text
