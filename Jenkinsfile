@@ -44,6 +44,10 @@ pipeline {
                     sh "cp '${FIREBASE_SERVICE_ACCOUNT_FILE}' app/service-account-firebasedist.json"
                     sh "cat app/service-account-firebasedist.json"
                 }
+                withCredentials([file(credentialsId: 'SERVICE_ACCOUNT_FILE', variable: 'SERVICE_ACCOUNT_FILE')]) {
+                    sh "cp '${SERVICE_ACCOUNT_FILE}' app/service-account.json"
+                    sh "cat app/service-account.json"
+                }
             }
         }
 
