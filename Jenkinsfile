@@ -1,9 +1,6 @@
-pipeline {
-
-    agent {
+agent {
         docker {
             image 'androidsdk/android-30'
-
         }
     }
     /* agent { label 'mac' } */
@@ -12,7 +9,6 @@ pipeline {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
     }
-
 
     stages {
 
@@ -50,7 +46,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                //sh "./gradlew clean bundleRelease"
+                //sh "./gradlew clean assembleRelease"
                 sh "echo 'Test...'"
             }
         }
@@ -79,5 +75,4 @@ pipeline {
            sh "rm app/service-account-firebasedist.json"
        }
     }
-
 }
