@@ -75,4 +75,3 @@ agent {
            sh "rm app/service-account-firebasedist.json"
        }
     }
-}
