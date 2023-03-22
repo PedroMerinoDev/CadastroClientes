@@ -3,12 +3,8 @@ pipeline {
     agent {
         docker {
             image 'androidsdk/android-30'
-            args  '-v /var/cache/gradle:/tmp/gradle-user-home:rw'
         }
     }
-     environment {
-
-      }
     /* agent { label 'mac' } */
 
     environment {
@@ -17,10 +13,10 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout git') {
             steps {
                 git branch: branch, credentialsId: 'udemy', url: url
-                sh "rsync -a --include /caches --include /wrapper --exclude '/*' ${GRADLE_CACHE}/ ${HOME}/.gradle || true"
             }
         }
 
@@ -65,13 +61,13 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                       sh "echo Publish" //sh "./gradlew appDistributionUploadRelease"
+                        sh "echo teste"//sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 
                 stage('Google Play...') {
                     steps {
-                        sh "echo Build" //sh "./gradlew publishBundle"
+                        sh "echo teste"//sh "./gradlew publishBundle"
                     }
                 }
             }
@@ -84,11 +80,4 @@ pipeline {
            sh "rm app/service-account-firebasedist.json"
        }
     }
-
-    post {
-      success {
-          // Write updates to the Gradle cache back to the host
-          sh "rsync -au ${HOME}/.gradle/caches ${HOME}/.gradle/wrapper ${GRADLE_CACHE}/ || true"
-        }
-      }
 }
