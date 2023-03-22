@@ -18,8 +18,8 @@ android {
         applicationId "com.msd.cadastroclientes"
         minSdk 21
         targetSdk 33
-        versionCode 8
-        versionName "8.0"
+        versionCode 9
+        versionName "9.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -53,7 +53,7 @@ android {
                 appId="1:785180205939:android:bdd2269311b134978c1b06"
                 releaseNotesFile="app/releasenotes.txt"
                 groups="Testers"
-                artifactType="APK"
+                artifactType="AAB"
                 serviceCredentialsFile="app/service-account-firebasedist.json"
                 //testers="amandamaria.contato@gmail.com, pedrinhomerino@gmail.com, phenohunt.app@gmail.com"
                 //apkPath="app/release/app-release.aab"
