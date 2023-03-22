@@ -14,8 +14,6 @@ pipeline {
     environment {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
-        HOME = '/home/android'
-        GRADLE_CACHE = '/tmp/gradle-user-home'
     }
 
     stages {
