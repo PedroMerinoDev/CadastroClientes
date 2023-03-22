@@ -3,7 +3,7 @@ pipeline {
     agent {
         docker {
             image 'androidsdk/android-30'
-            args '-u root:sudo -v $HOME/workspace/myproject:/myproject'
+
         }
     }
     /* agent { label 'mac' } */
@@ -50,8 +50,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh "./gradlew clean bundleRelease"
-                args '-u root:sudo -v $HOME/workspace/myproject:/myproject'
+                //sh "./gradlew clean bundleRelease"
+                sh "echo 'Test...'"
             }
         }
 
@@ -59,7 +59,8 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                        sh "./gradlew appDistributionUploadRelease"
+                        //sh "./gradlew appDistributionUploadRelease"
+                        sh "echo 'Test...'"
                     }
                 }
 
