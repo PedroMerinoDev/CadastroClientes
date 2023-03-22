@@ -16,6 +16,7 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 sudo mkdir /var/jenkins_home
 sudo chmod -R 777 /var/jenkins_home
+sudo chmod -R 777 /var/run/docker.sock
 
 3) Criar o arquivo docker-compose.yaml
 

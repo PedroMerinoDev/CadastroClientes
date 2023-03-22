@@ -2,7 +2,8 @@ pipeline {
 
     agent {
         docker {
-            image 'androidsdk/android-30'
+            image 'android:33'
+            args '/var/run/docker.sock:/var/run/docker.sock'
         }
     }
     /* agent { label 'mac' } */
