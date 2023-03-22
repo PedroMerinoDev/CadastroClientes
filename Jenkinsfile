@@ -13,7 +13,6 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout git') {
             steps {
                 git branch: branch, credentialsId: 'udemy', url: url
