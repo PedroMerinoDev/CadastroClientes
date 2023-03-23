@@ -1,1 +1,1 @@
-Release Jenkis V18.2 test mingc/android-build-box:latest
+Release Jenkis V18.3 test mingc/android-build-box:1.25.0

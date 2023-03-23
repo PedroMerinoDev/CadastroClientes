@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-            image 'mingc/android-build-box:latest'
+            image 'mingc/android-build-box:1.25.0' //androidsdk/android-30
         }
     }
     /* agent { label 'mac' } */
