@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-            image 'mingc/android-build-box:1.25.0' //androidsdk/android-30
+            image 'androidsdk/android-30'
         }
     }
     /* agent { label 'mac' } */
@@ -77,7 +77,7 @@ pipeline {
        always {
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
-
+           sh "rm app/service-account.json"
        }
     }
 }
