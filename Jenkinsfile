@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-            image 'androidsdk/android-30'
+            image 'budtmo/docker-android-x86-8.1'
         }
     }
     /* agent { label 'mac' } */
@@ -36,6 +36,7 @@ pipeline {
         stage('Credentials') {
             steps {
                 withCredentials([file(credentialsId: 'ANDROID_KEYSTORE_FILE', variable: 'ANDROID_KEYSTORE_FILE')]) {
+                
                     sh "cp '${ANDROID_KEYSTORE_FILE}' app/hello.jks"
                     sh "cat app/hello.jks"
                 }
@@ -52,7 +53,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                 sh "./gradlew clean bundleRelease"
+                 sh "echo teste"//sh "./gradlew clean bundleRelease"
             }
         }
 
@@ -60,13 +61,13 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                       sh "./gradlew appDistributionUploadRelease"
+                       sh "echo teste"//sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 
                 stage('Google Play...') {
                     steps {
-                        sh "./gradlew publishBundle"
+                        sh "echo teste"//sh "./gradlew publishBundle"
                     }
                 }
             }
