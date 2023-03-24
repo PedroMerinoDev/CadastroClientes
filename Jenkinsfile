@@ -53,7 +53,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                 sh "echo teste"//sh "./gradlew clean bundleRelease"
+                 sh "./gradlew clean bundleRelease"
             }
         }
 
