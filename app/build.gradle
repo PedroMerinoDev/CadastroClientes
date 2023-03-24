@@ -18,8 +18,8 @@ android {
         applicationId "com.msd.cadastroclientes"
         minSdk 21
         targetSdk 33
-        versionCode 19
-        versionName "18.5"
+        versionCode 20
+        versionName "20"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
