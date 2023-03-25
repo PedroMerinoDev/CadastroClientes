@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-            image 'cimg/android:2023.03'
+            image 'cimg/android:2023.03' //androidsdk/android-30
         }
     }
     /* agent { label 'mac' } */
