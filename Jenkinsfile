@@ -39,7 +39,22 @@ pipeline {
             }
         }
 
-   stage('Setup') {
+       stage('Create Emulator') {
+                   steps {
+                       sh 'echo no | avdmanager create avd --name test --package "system-images;android-30;default;x86_64"'
+                   }
+               }
+               stage('Start Emulator') {
+                   steps {
+                       sh 'emulator -avd test -no-audio -no-window -gpu swiftshader_indirect &'
+                       // Wait for the emulator to start up
+                       sh 'android-wait-for-emulator'
+                       // Unlock the emulator screen
+                       sh 'adb shell input keyevent 82'
+                   }
+               }
+
+/*    stage('Setup') {
             steps {
                 sh 'sdkmanager --install "system-images;android-30;google_apis;x86" "platform-tools" "platforms;android-30" "build-tools;29.0.3"'
                 sh 'echo no | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86" --force'
@@ -58,7 +73,7 @@ pipeline {
             steps {
                 sh './gradlew clean build connectedAndroidTest'
             }
-        }
+        } */
 
 
             stage('QualityCheck') {
