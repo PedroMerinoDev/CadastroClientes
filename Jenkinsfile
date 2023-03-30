@@ -11,7 +11,7 @@ pipeline {
     environment {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
-        ANDROID_HOME = tool 'android'
+
     }
 
     stages {
