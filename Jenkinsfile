@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-            image 'budtmo/docker-android-x86-8.1' //cimg/android:2023.03 'androidsdk/android-30'
+            image 'budtmo/docker-android' //cimg/android:2023.03 'androidsdk/android-30'
         }
     }
     /* agent { label 'mac' } */
@@ -10,9 +10,6 @@ pipeline {
     environment {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
-        ANDROID_HOME = 'usr/local/android-sdk'
-        EMULATOR_NAME = 'Samsung Galaxy S6'
-        TEST_APK_LOCATION = 'app/build/outputs/apk/debug/app-debug-androidTest.apk'
     }
 
     stages {
@@ -50,7 +47,7 @@ pipeline {
 
                    stage('TestInstrumented') {
                               steps {
-                                     sh "./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='${EMULATOR_NAME}'"
+                                     sh "./gradlew connectedDebugAndroidTest"
                                    }
                                 }
 
