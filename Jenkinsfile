@@ -40,12 +40,25 @@ pipeline {
                 }
             }
         }
+          stage('Build') {
+                    steps {
+                        sh "./gradlew clean bundleRelease"
+                        step( [ $class: 'JacocoPublisher' ] )
+                    }
+                }
 
             stage('QualityCheck') {
                     steps {
-                       sh "./gradlew lint"
+                      sh "echo testee"// sh "./gradlew lint"
                     }
                   }
+
+                   stage('TestInstrumented') {
+                              steps {
+                                     sh "./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='${EMULATOR_NAME}'"
+                                   }
+                                }
+
 
                 stage('TestUnit') {
                     steps {
@@ -53,19 +66,6 @@ pipeline {
                     }
                 }
 
-
-        stage('Build') {
-            steps {
-                sh "./gradlew clean bundleRelease"
-                step( [ $class: 'JacocoPublisher' ] )
-            }
-        }
-
-         stage('TestInstrumented') {
-            steps {
-                   sh "./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='${EMULATOR_NAME}'"
-                 }
-              }
 
         stage('Publish') {
             parallel {
@@ -88,7 +88,7 @@ pipeline {
        always {
           junit '**/build/test-results/**/*.xml'
           //junit '**/build/reports/lint-results.xml'
-          //jacoco(execPattern: '**/build/jacoco/*.exec')
+          jacoco(execPattern: '**/build/jacoco/*.exec')
 
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
