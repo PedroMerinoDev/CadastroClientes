@@ -2,7 +2,8 @@ pipeline {
 
     agent {
         docker {
-            image 'androidsdk/android-30' //cimg/android:2023.03
+            image 'budmo/docker-android:latest' //cimg/android:2023.03 'androidsdk/android-30'
+            label 'android'
         }
     }
     /* agent { label 'mac' } */
@@ -11,7 +12,7 @@ pipeline {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
         ANDROID_HOME = 'usr/local/android-sdk'
-        EMULATOR_NAME = 'test-emulator'
+        EMULATOR_NAME = 'Samsung Galaxy S6'
         TEST_APK_LOCATION = 'app/build/outputs/apk/debug/app-debug-androidTest.apk'
     }
 
@@ -40,12 +41,7 @@ pipeline {
                 }
             }
         }
-          stage('Build') {
-                    steps {
-                        sh "./gradlew clean bundleRelease"
-                        step( [ $class: 'JacocoPublisher' ] )
-                    }
-                }
+
 
             stage('QualityCheck') {
                     steps {
@@ -65,6 +61,13 @@ pipeline {
                         sh "./gradlew clean jacocoTestReport"
                     }
                 }
+
+                   stage('Build') {
+                                    steps {
+                                        sh "./gradlew clean bundleRelease"
+                                        //step( [ $class: 'JacocoPublisher' ] )
+                                    }
+                                }
 
 
         stage('Publish') {
@@ -87,7 +90,6 @@ pipeline {
     post {
        always {
           junit '**/build/test-results/**/*.xml'
-          //junit '**/build/reports/lint-results.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
 
            sh "rm app/hello.jks"
