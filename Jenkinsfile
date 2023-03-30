@@ -41,7 +41,7 @@ pipeline {
 
        stage('Create Emulator') {
                    steps {
-                       sh 'echo no | avdmanager create avd --name test --package "system-images;android-30;default;x86_64"'
+                       sh 'echo no | avdmanager create avd --name test --package "system-images;android-30;google_apis;x86_64"'
                    }
                }
                stage('Start Emulator') {
