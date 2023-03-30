@@ -2,7 +2,7 @@ pipeline {
 
     agent {
         docker {
-             image 'cimg/android:2023.0' //cimg/android:2023.0
+             image 'androidsdk/android-30' //cimg/android:2023.0
         }
     }
     /* agent { label 'mac' } */
@@ -41,8 +41,8 @@ pipeline {
 
    stage('Setup') {
             steps {
-                sh 'sdkmanager --install "system-images;android-29;google_apis;x86" "platform-tools" "platforms;android-29" "build-tools;29.0.3"'
-                sh 'echo no | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86" --force'
+                sh 'sdkmanager --install "system-images;android-30;google_apis;x86" "platform-tools" "platforms;android-30" "build-tools;29.0.3"'
+                sh 'echo no | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86" --force'
             }
         }
         stage('Start Emulator') {
