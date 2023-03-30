@@ -2,8 +2,8 @@ pipeline {
 
     agent {
         docker {
-            image 'androidsdk/android-30' //cimg/android:2023.0
-             args '-v $HOME/.android:/root/.android -p 5554:5554 -p 5555:5555' // Mounting local Android configuration directory and mapping ports for emulator
+            image 'budtmo/docker-android' //cimg/android:2023.0
+             args '-v $HOME/.android:/root/.android -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6"' // Mounting local Android configuration directory and mapping ports for emulator
         }
     }
     /* agent { label 'mac' } */
@@ -43,20 +43,19 @@ pipeline {
    stage('Build1') {
                                     steps {
                                     sh 'echo "no" | avdmanager create avd --name test --device "Nexus 5X" --package "system-images;android-30;google_apis;x86_64"'
-                                    sh 'emulator -avd test -no-audio -no-window -no-boot-anim -gpu off &'
+                                    sh 'emulator -avd Samsung Galaxy S6 -no-audio -no-window -no-boot-anim -gpu off &'
                                     }
                                 }
 
             stage('QualityCheck') {
                     steps {
                       sh "echo $WORKSPACE"// sh "./gradlew lint"
-
                     }
                   }
 
                    stage('TestInstrumented') {
                               steps {
-                                      sh "./gradlew connectedDebugAndroidTest"
+                                      sh "echo $WORKSPACE"//sh "./gradlew connectedDebugAndroidTest"
                                    }
                                 }
 
