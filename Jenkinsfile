@@ -11,7 +11,6 @@ pipeline {
     environment {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
-
     }
 
     stages {
@@ -41,7 +40,7 @@ pipeline {
         }
 
 
-        stage('Build') {
+        stage('Build Prepare') {
            steps {
                sh "./gradlew clean"
            }
