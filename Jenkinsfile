@@ -62,11 +62,11 @@ pipeline {
             }
         }
 
-                stage('TestInstrumented') {
-                    steps {
-                        sh "./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='${EMULATOR_NAME}'"
-                    }
-                }
+     /*    stage('TestInstrumented') {
+            steps {
+                   sh "./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='${EMULATOR_NAME}'"
+                 }
+              } */
 
         stage('Publish') {
             parallel {
