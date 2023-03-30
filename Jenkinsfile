@@ -3,7 +3,7 @@ pipeline {
     agent {
         docker {
             image 'androidsdk/android-30' //cimg/android:2023.0
-            args '-v /app'
+            args '-v /var/jenkins_home/workspace/HelloAndroid:/app'
         }
     }
     /* agent { label 'mac' } */
