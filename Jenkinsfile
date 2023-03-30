@@ -43,11 +43,13 @@ pipeline {
             }
         }
 
-   stage('Build1') {
-                                    steps {
-                                    sh 'echo "no" | avdmanager create avd --name test --device "test" --package "system-images;android-27;google_apis;x86"'
-                                    sh 'emulator -avd test -no-audio -no-window -no-boot-anim -gpu off &'
-                                    }
+   stage('CreateEmulator') {
+                                 steps {
+                                               sh 'echo no | android create avd --force -n test -t android-30 --abi google_apis/x86_64'
+                                               sh 'emulator -avd test -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect &'
+                                               sh 'android-wait-for-emulator'
+                                               sh 'adb shell input keyevent 82 &'
+                                           }
                                 }
 
             stage('QualityCheck') {
