@@ -46,7 +46,7 @@ pipeline {
    stage('Build1') {
                                     steps {
                                     sh 'echo "no" | avdmanager create avd --name test --device "Samsung Galaxy S6" --package "system-images;android-27;google_apis;x86"'
-                                    sh 'emulator -avd Samsung Galaxy S6 -no-audio -no-window -no-boot-anim -gpu off &'
+                                    sh 'emulator -avd test -no-audio -no-window -no-boot-anim -gpu off &'
                                     }
                                 }
 
