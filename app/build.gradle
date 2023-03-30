@@ -1,7 +1,11 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     id 'com.android.application'
     id 'com.github.triplet.play'
     id 'com.google.firebase.appdistribution'
+    id 'jacoco'
 }
 
 def keystorePropertiesFile = rootProject.file("app/keystore.properties")
@@ -34,15 +38,14 @@ android {
 
     buildTypes {
 
-        debug{
-            def url = System.getenv("BASE_URL") ?:  urlServer
-
-            buildConfigField "String", "BASE_URL", '"' + url +'"'
+        debug {
+            def url = System.getenv("BASE_URL") ?: urlServer
+            buildConfigField "String", "BASE_URL", '"' + url + '"'
+            testCoverageEnabled true
         }
 
         release {
             buildConfigField "String", "BASE_URL", '"https://google.com"'
-
 
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -50,11 +53,11 @@ android {
 
             firebaseAppDistribution {
                 //pode ser escondida com variaveis de ambinete System.getenv
-                appId="1:785180205939:android:bdd2269311b134978c1b06"
-                releaseNotesFile="app/releasenotes.txt"
-                groups="Testers"
-                artifactType="AAB"
-                serviceCredentialsFile="app/service-account-firebasedist.json"
+                appId = "1:785180205939:android:bdd2269311b134978c1b06"
+                releaseNotesFile = "app/releasenotes.txt"
+                groups = "Testers"
+                artifactType = "AAB"
+                serviceCredentialsFile = "app/service-account-firebasedist.json"
                 //testers="amandamaria.contato@gmail.com, pedrinhomerino@gmail.com, phenohunt.app@gmail.com"
                 //apkPath="app/release/app-release.aab"
             }
@@ -65,8 +68,20 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding true
+    }
+
+    lintOptions {
+        xmlReport true
+        // Set the path to the output file
+        xmlOutput file("${rootDir}/app/build/reports/lint-results.xml")
+        // Specify which issues to check for
+        disable 'UnusedResources'
+        // Set the severity level for specific issues
+        warning 'TypographyDashes', 'TypographyQuotes'
+
     }
 }
 
@@ -83,4 +98,82 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+
+jacoco {
+    version = "0.8.8"
+}
+
+
+// task to run the instrumented tests and generate the Jacoco report
+task jacocoTestReport(type: JacocoReport, dependsOn: ['test', 'testDebugUnitTest']) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+        html.destination file("${buildDir}/reports/jacoco")
+    }
+
+    def fileFilter = [
+            '**/R.class',
+            '**/R$*.class',
+            '**/BuildConfig.*',
+            '**/Manifest*.*',
+            '**/*Test*.*',
+            '**/*TestCase*.*'
+    ]
+
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+    def testSrc = "${project.projectDir}/src/test/java"
+    def testInstrumentedSrc = "${project.projectDir}/src/androidTest/java"
+
+    sourceDirectories.from(files([testSrc]))
+    sourceDirectories.from(files([testInstrumentedSrc]))
+    classDirectories.from(files([debugTree]))
+    executionData.from(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
+}
+
+// add the task to the list of tasks run by default
+check.dependsOn jacocoTestReport
+
+tasks.withType(Test) {
+    /*  reports {
+          junitXml.enabled = true
+          html.enabled = true
+      }*/
+    testLogging {
+        // set options for log level LIFECYCLE
+        events TestLogEvent.FAILED,
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.STANDARD_OUT
+        exceptionFormat TestExceptionFormat.FULL
+        showExceptions true
+        showCauses true
+        showStackTraces true
+
+        // set options for log level DEBUG and INFO
+        debug {
+            events TestLogEvent.STARTED,
+                    TestLogEvent.FAILED,
+                    TestLogEvent.PASSED,
+                    TestLogEvent.SKIPPED,
+                    TestLogEvent.STANDARD_ERROR,
+                    TestLogEvent.STANDARD_OUT
+            exceptionFormat TestExceptionFormat.FULL
+        }
+        info.events = debug.events
+        info.exceptionFormat = debug.exceptionFormat
+
+        afterSuite { desc, result ->
+            if (!desc.parent) { // will match the outermost suite
+                def output = "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} passed, ${result.failedTestCount} failed, ${result.skippedTestCount} skipped)"
+                def startItem = '|  ', endItem = '  |'
+                def repeatLength = startItem.length() + output.length() + endItem.length()
+                println('\n' + ('-' * repeatLength) + '\n' + startItem + output + endItem + '\n' + ('-' * repeatLength))
+            }
+        }
+    }
 }
