@@ -2,7 +2,8 @@ pipeline {
 
     agent {
         docker {
-            image 'budtmo/docker-android' //cimg/android:2023.03 'androidsdk/android-30'
+            image 'androidsdk/android-30' //cimg/android:2023.0
+            args '-v /app'
         }
     }
     /* agent { label 'mac' } */
