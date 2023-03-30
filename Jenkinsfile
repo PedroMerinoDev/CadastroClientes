@@ -3,7 +3,7 @@ pipeline {
     agent {
         docker {
             image 'androidsdk/android-30' //cimg/android:2023.0
-            args '-v $HOME/.android:/root/.android'
+             args '-v $HOME/.android:/root/.android -p 5554:5554 -p 5555:5555' // Mounting local Android configuration directory and mapping ports for emulator
         }
     }
     /* agent { label 'mac' } */
@@ -42,21 +42,21 @@ pipeline {
 
    stage('Build1') {
                                     steps {
-                                        sh "echo $ANDROID_HOME"// sh "./gradlew clean bundleDebug"
-                                        //step( [ $class: 'JacocoPublisher' ] )
+                                    sh 'echo "no" | avdmanager create avd --name test --device "Nexus 5X" --package "system-images;android-30;google_apis;x86_64"'
+                                    sh 'emulator -avd test -no-audio -no-window -no-boot-anim -gpu off &'
                                     }
                                 }
 
             stage('QualityCheck') {
                     steps {
                       sh "echo $WORKSPACE"// sh "./gradlew lint"
-                      sh "echo $ANDROID_HOME"
+
                     }
                   }
 
                    stage('TestInstrumented') {
                               steps {
-                                      sh "echo $ANDROID_HOME"//sh "./gradlew connectedDebugAndroidTest"
+                                      sh "echo teste"//sh "./gradlew connectedDebugAndroidTest"
                                    }
                                 }
 
