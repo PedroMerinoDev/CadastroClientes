@@ -10,6 +10,9 @@ pipeline {
     environment {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
+        ANDROID_HOME = 'usr/local/android-sdk'
+        EMULATOR_NAME = 'test-emulator'
+        TEST_APK_LOCATION = 'app/build/outputs/apk/debug/app-debug-androidTest.apk'
     }
 
     stages {
@@ -18,19 +21,6 @@ pipeline {
                 git branch: branch, credentialsId: 'udemy', url: url
             }
         }
-
-      /*    stage('Lint') {
-            steps {
-                sh "./gradlew lint"
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh "./gradlew test --stacktrace"
-            }
-        } */
-
 
         // Manage Jenkins > Credentials > Add > Secret file or Secret Text
         stage('Credentials') {
@@ -60,22 +50,23 @@ pipeline {
 
                 stage('TestUnit') {
                     steps {
-                        sh "./gradlew jacocoTestReport"
+                        sh "./gradlew clean jacocoTestReport"
                     }
                 }
 
-                stage('TestInstrumented') {
-                    steps {
-                        sh "./gradlew connectedAndroidTest"
-                    }
-                }
 
         stage('Build') {
             steps {
-                 sh "./gradlew clean createDebugCoverageReport"
-                 sh "echo teste" //sh "./gradlew clean bundleRelease"
+                sh "./gradlew clean bundleRelease"
+                step( [ $class: 'JacocoPublisher' ] )
             }
         }
+
+                stage('TestInstrumented') {
+                    steps {
+                        sh "./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='${EMULATOR_NAME}'"
+                    }
+                }
 
         stage('Publish') {
             parallel {
@@ -97,8 +88,9 @@ pipeline {
     post {
        always {
           junit '**/build/test-results/**/*.xml'
-          //junit '**/build/reports/lint-results.xml'
-           jacoco(execPattern: '**/build/jacoco/*.exec')
+          junit '**/build/reports/lint-results.xml'
+          //jacoco(execPattern: '**/build/jacoco/*.exec')
+
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
            sh "rm app/service-account.json"

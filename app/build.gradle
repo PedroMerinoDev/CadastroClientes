@@ -39,14 +39,15 @@ android {
     buildTypes {
 
         debug {
+            debuggable true
             def url = System.getenv("BASE_URL") ?: urlServer
             buildConfigField "String", "BASE_URL", '"' + url + '"'
             testCoverageEnabled true
+
         }
 
         release {
             buildConfigField "String", "BASE_URL", '"https://google.com"'
-
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
@@ -83,6 +84,16 @@ android {
         warning 'TypographyDashes', 'TypographyQuotes'
 
     }
+
+    testOptions {
+
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
+    }
+
 }
 
 play {
@@ -107,7 +118,7 @@ jacoco {
 
 
 // task to run the instrumented tests and generate the Jacoco report
-task jacocoTestReport(type: JacocoReport, dependsOn: ['test', 'testDebugUnitTest']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
 
     reports {
         xml.enabled = true
@@ -115,34 +126,36 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['test', 'testDebugUnitTest
         html.destination file("${buildDir}/reports/jacoco")
     }
 
-    def fileFilter = [
-            '**/R.class',
-            '**/R$*.class',
-            '**/BuildConfig.*',
-            '**/Manifest*.*',
-            '**/*Test*.*',
-            '**/*TestCase*.*'
-    ]
-
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
     def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
     def mainSrc = "${project.projectDir}/src/main/java"
-    def testSrc = "${project.projectDir}/src/test/java"
-    def testInstrumentedSrc = "${project.projectDir}/src/androidTest/java"
 
+    sourceDirectories.from(files([mainSrc]))
+    classDirectories.from(files([debugTree]))
+    executionData.from(fileTree(dir: "$buildDir", includes: [
+            "jacoco/testDebugUnitTest.exec",
+            "outputs/code-coverage/connected/*coverage.xml"
+    ]))
+
+/*  def testInstrumentedSrc = "${project.projectDir}/src/androidTest/java"
+    def testSrc = "${project.projectDir}/src/test/java"
     sourceDirectories.from(files([testSrc]))
     sourceDirectories.from(files([testInstrumentedSrc]))
     classDirectories.from(files([debugTree]))
-    executionData.from(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
+    executionData.from(files("${buildDir}/jacoco/testDebugUnitTest.exec"))*/
 }
 
 // add the task to the list of tasks run by default
 check.dependsOn jacocoTestReport
 
 tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
     /*  reports {
           junitXml.enabled = true
           html.enabled = true
       }*/
+
     testLogging {
         // set options for log level LIFECYCLE
         events TestLogEvent.FAILED,
