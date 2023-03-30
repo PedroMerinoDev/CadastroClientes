@@ -56,7 +56,7 @@ pipeline {
 
                    stage('TestInstrumented') {
                               steps {
-                                      sh "echo teste"//sh "./gradlew connectedDebugAndroidTest"
+                                      sh "./gradlew connectedDebugAndroidTest"
                                    }
                                 }
 
