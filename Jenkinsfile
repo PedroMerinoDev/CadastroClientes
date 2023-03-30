@@ -3,6 +3,7 @@ pipeline {
     agent {
         docker {
              image 'androidsdk/android-30' //cimg/android:2023.0
+             args '--privileged'
         }
     }
     /* agent { label 'mac' } */
