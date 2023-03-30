@@ -39,6 +39,12 @@ pipeline {
             }
         }
 
+   stage('Build1') {
+                                    steps {
+                                        sh "./gradlew clean bundleDebug"
+                                        //step( [ $class: 'JacocoPublisher' ] )
+                                    }
+                                }
 
             stage('QualityCheck') {
                     steps {
@@ -48,7 +54,7 @@ pipeline {
 
                    stage('TestInstrumented') {
                               steps {
-                                     sh "echo testee"//sh "./gradlew connectedDebugAndroidTest"
+                                     sh "./gradlew connectedDebugAndroidTest"
                                    }
                                 }
 
