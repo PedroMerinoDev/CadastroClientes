@@ -44,7 +44,6 @@ pipeline {
             stage('QualityCheck') {
                     steps {
                        sh "./gradlew lint"
-
                     }
                   }
 
@@ -88,7 +87,7 @@ pipeline {
     post {
        always {
           junit '**/build/test-results/**/*.xml'
-          junit '**/build/reports/lint-results.xml'
+          //junit '**/build/reports/lint-results.xml'
           //jacoco(execPattern: '**/build/jacoco/*.exec')
 
            sh "rm app/hello.jks"
