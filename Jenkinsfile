@@ -45,7 +45,7 @@ pipeline {
 
    stage('CreateEmulator') {
                                  steps {
-                                               sh 'echo no | android create avd --force -n test -t android-27 --abi google_apis/x86_64'
+                                               sh 'echo no | android create avd --force -n test -t android-27 --abi google_apis/x86'
                                                sh 'emulator -avd test -no-window -no-audio -no-boot-anim -gpu swiftshader_indirect &'
                                                sh 'android-wait-for-emulator'
                                                sh 'adb shell input keyevent 82 &'
