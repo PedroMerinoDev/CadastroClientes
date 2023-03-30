@@ -2,8 +2,7 @@ pipeline {
 
     agent {
         docker {
-             image 'budtmo/docker-android-x86-8.1' //cimg/android:2023.0
-             args '-v $HOME/.android:/root/.android -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6"' // Mounting local Android configuration directory and mapping ports for emulator
+             image 'cimg/android:2023.0'
         }
     }
     /* agent { label 'mac' } */
@@ -39,13 +38,28 @@ pipeline {
                 }
             }
         }
-
-   stage('CreateEmulator') {
-                                 steps {
-                                               sh "./gradlew connectedAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='Samsung Galaxy S6'"
-                                           }
-                                }
-
+ stages {
+        stage('Setup') {
+            steps {
+                sh 'sdkmanager --install "system-images;android-29;google_apis;x86" "platform-tools" "platforms;android-29" "build-tools;29.0.3"'
+                sh 'echo no | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86" --force'
+            }
+        }
+        stage('Start Emulator') {
+            steps {
+                sh 'emulator -avd test -no-audio -no-window -gpu swiftshader_indirect &'
+                // Wait for the emulator to start up
+                sh 'android-wait-for-emulator'
+                // Unlock the emulator screen
+                sh 'adb shell input keyevent 82'
+            }
+        }
+        stage('Build and Test') {
+            steps {
+                sh './gradlew clean build connectedAndroidTest'
+            }
+        }
+    }
             stage('QualityCheck') {
                     steps {
                       sh "echo $WORKSPACE"// sh "./gradlew lint"
