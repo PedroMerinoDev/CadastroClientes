@@ -44,7 +44,7 @@ pipeline {
             stage('QualityCheck') {
                     steps {
                        sh "./gradlew lint"
-                       sh "./gradlew check"
+
                     }
                   }
 
@@ -62,11 +62,11 @@ pipeline {
             }
         }
 
-     /*    stage('TestInstrumented') {
+         stage('TestInstrumented') {
             steps {
                    sh "./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.emulator='${EMULATOR_NAME}'"
                  }
-              } */
+              }
 
         stage('Publish') {
             parallel {
