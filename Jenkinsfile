@@ -2,7 +2,8 @@ pipeline {
 
     agent {
         docker {
-             image 'cimg/android:2023.0'
+             image 'budtmo/docker-android-x86-8.1' //cimg/android:2023.0
+             args '-v $HOME/.android:/root/.android -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6"' // Mounting local Android configuration directory and mapping ports for emulator
         }
     }
     /* agent { label 'mac' } */
@@ -38,8 +39,8 @@ pipeline {
                 }
             }
         }
- stages {
-        stage('Setup') {
+
+   stage('Setup') {
             steps {
                 sh 'sdkmanager --install "system-images;android-29;google_apis;x86" "platform-tools" "platforms;android-29" "build-tools;29.0.3"'
                 sh 'echo no | avdmanager create avd -n test -k "system-images;android-29;google_apis;x86" --force'
@@ -59,7 +60,8 @@ pipeline {
                 sh './gradlew clean build connectedAndroidTest'
             }
         }
-    }
+
+
             stage('QualityCheck') {
                     steps {
                       sh "echo $WORKSPACE"// sh "./gradlew lint"
