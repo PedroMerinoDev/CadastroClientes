@@ -48,7 +48,7 @@ pipeline {
                    steps {
                        sh 'emulator -avd test -no-audio -no-window -gpu swiftshader_indirect &'
                        // Wait for the emulator to start up
-                       sh 'android-wait-for-emulator'
+                       sh 'adb wait-for-device'
                        // Unlock the emulator screen
                        sh 'adb shell input keyevent 82'
                    }
