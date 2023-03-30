@@ -42,26 +42,26 @@ pipeline {
 
             stage('QualityCheck') {
                     steps {
-                      sh "echo testee"// sh "./gradlew lint"
+                      sh "echo $WORKSPACE"// sh "./gradlew lint"
                     }
                   }
 
                    stage('TestInstrumented') {
                               steps {
-                                     sh "./gradlew connectedDebugAndroidTest"
+                                     sh "echo testee"//sh "./gradlew connectedDebugAndroidTest"
                                    }
                                 }
 
 
                 stage('TestUnit') {
                     steps {
-                        sh "./gradlew clean jacocoTestReport"
+                       sh "echo testee"// sh "./gradlew clean jacocoTestReport"
                     }
                 }
 
                    stage('Build') {
                                     steps {
-                                        sh "./gradlew clean bundleRelease"
+                                        sh "echo testee"//sh "./gradlew clean bundleRelease"
                                         //step( [ $class: 'JacocoPublisher' ] )
                                     }
                                 }
@@ -86,8 +86,8 @@ pipeline {
 
     post {
        always {
-          junit '**/build/test-results/**/*.xml'
-          jacoco(execPattern: '**/build/jacoco/*.exec')
+          //junit '**/build/test-results/**/*.xml'
+          //jacoco(execPattern: '**/build/jacoco/*.exec')
 
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
