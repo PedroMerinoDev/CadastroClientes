@@ -2,8 +2,7 @@ pipeline {
 
     agent {
         docker {
-             image 'budtmo/docker-android-x86-8.1' //cimg/android:2023.0
-             args '-v $HOME/.android:/root/.android -p 6080:6080 -p 5554:5554 -p 5555:5555 -e DEVICE="Samsung Galaxy S6"' // Mounting local Android configuration directory and mapping ports for emulator
+             image 'cimg/android:2023.0' //cimg/android:2023.0
         }
     }
     /* agent { label 'mac' } */
