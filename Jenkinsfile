@@ -39,18 +39,41 @@ pipeline {
             }
         }
 
+
+        stage('Build') {
+           steps {
+               sh "./gradlew clean"
+           }
+        }
+
+        stage('QualityCheck') {
+           steps {
+               sh "echo lint"// sh "./gradlew lint"
+           }
+        }
+
+         stage('Install KVM') {
+            steps {
+                sh 'apt-get update && apt-get install -y qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils'
+                sh 'usermod -a -G libvirtd $(whoami)'
+                sh 'kvm-ok'
+            }
+        }
+
        stage('Create Emulator') {
-                   steps {
-                       sh 'echo no | avdmanager create avd --name test --package "system-images;android-30;google_apis;x86_64"'
-                   }
-               }
-               stage('Start Emulator') {
-                   steps {
-                       sh 'emulator -avd test -no-audio -no-window -gpu swiftshader_indirect & adb wait-for-device'
-                       // Unlock the emulator screen
-                       sh 'adb shell input keyevent 82'
-                   }
-               }
+           steps {
+               //sh 'sdkmanager --install "system-images;android-30;google_apis;x86" "platform-tools" "platforms;android-30" "build-tools;29.0.3"'
+               sh 'echo no | avdmanager create avd --name test --package "system-images;android-30;google_apis;x86_64"'
+           }
+       }
+
+       stage('Start Emulator') {
+           steps {
+               sh 'emulator -avd test -no-audio -no-window -gpu swiftshader_indirect -qemu -m 2048 -enable-kvm & adb wait-for-device'
+               // Unlock the emulator screen
+               sh 'adb shell input keyevent 82'
+           }
+       }
 
 /*    stage('Setup') {
             steps {
@@ -74,11 +97,6 @@ pipeline {
         } */
 
 
-            stage('QualityCheck') {
-                    steps {
-                      sh "echo $WORKSPACE"// sh "./gradlew lint"
-                    }
-                  }
 
                    stage('TestInstrumented') {
                               steps {
