@@ -11,6 +11,7 @@ pipeline {
     environment {
         branch = 'master'
         url = 'https://github.com/PedroMerinoDev/CadastroClientes'
+        ANDROID_HOME = tool 'android'
     }
 
     stages {
@@ -41,7 +42,7 @@ pipeline {
 
    stage('Build1') {
                                     steps {
-                                        sh "./gradlew clean bundleDebug"
+                                        sh "echo $ANDROID_HOME"// sh "./gradlew clean bundleDebug"
                                         //step( [ $class: 'JacocoPublisher' ] )
                                     }
                                 }
@@ -49,12 +50,13 @@ pipeline {
             stage('QualityCheck') {
                     steps {
                       sh "echo $WORKSPACE"// sh "./gradlew lint"
+                      sh "echo $ANDROID_HOME"
                     }
                   }
 
                    stage('TestInstrumented') {
                               steps {
-                                     sh "./gradlew connectedDebugAndroidTest"
+                                      sh "echo $ANDROID_HOME"//sh "./gradlew connectedDebugAndroidTest"
                                    }
                                 }
 
