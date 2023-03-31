@@ -93,8 +93,6 @@ pipeline {
             }
         } */
 
-
-
         stage('TestInstrumented') {
             steps {
                sh "./gradlew connectedDebugAndroidTest"
