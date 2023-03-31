@@ -85,7 +85,7 @@ pipeline {
 
        stage('Build') {
            steps {
-               sh "echo testee"//sh "./gradlew clean bundleRelease"
+               sh "echo testeee"//sh "./gradlew clean bundleRelease"
                //step( [ $class: 'JacocoPublisher' ] )
            }
        }
