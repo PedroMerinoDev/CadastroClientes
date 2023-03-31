@@ -41,7 +41,7 @@ pipeline {
 
         stage('Build Prepare') {
            steps {
-               sh "./gradlew clean bundleRelease"
+               sh "./gradlew clean"
            }
         }
 
@@ -66,7 +66,7 @@ pipeline {
 
        stage('Create Emulator') {
            steps {
-               //sh 'sdkmanager --install "system-images;android-30;google_apis;x86" "platform-tools" "platforms;android-30" "build-tools;29.0.3"'
+               sh 'sdkmanager --install "system-images;android-30;google_apis;x86" "platform-tools" "platforms;android-30" "build-tools;29.0.3"'
                sh 'echo no | avdmanager create avd --name test --package "system-images;android-30;google_apis;x86_64"'
            }
        }
@@ -77,13 +77,13 @@ pipeline {
            }
        }
 
-       stage('Test') {
+       stage('Instrumented Tests') {
            steps {
                sh "./gradlew clean jacocoTestReport"
            }
        }
 
-       stage('Build') {
+       stage('Assign Build') {
            steps {
                sh "echo testeee"//sh "./gradlew clean bundleRelease"
                //step( [ $class: 'JacocoPublisher' ] )
