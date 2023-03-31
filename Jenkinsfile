@@ -118,7 +118,7 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                       sh "echo testee"//sh "./gradlew appDistributionUploadRelease"
+                       sh "echo testeee"//sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 
