@@ -42,7 +42,7 @@ pipeline {
 
         stage('Build Prepare') {
            steps {
-               sh "./gradlew clean"
+               sh "./gradlew clean build"
            }
         }
 
@@ -72,37 +72,16 @@ pipeline {
            }
        }
 
-/*    stage('Setup') {
-            steps {
-                sh 'sdkmanager --install "system-images;android-30;google_apis;x86" "platform-tools" "platforms;android-30" "build-tools;29.0.3"'
-                sh 'echo no | avdmanager create avd -n test -k "system-images;android-30;google_apis;x86" --force'
-            }
-        }
-        stage('Start Emulator') {
-            steps {
-                sh 'emulator -avd test -no-audio -no-window -gpu swiftshader_indirect &'
-                // Wait for the emulator to start up
-                sh 'android-wait-for-emulator'
-                // Unlock the emulator screen
-                sh 'adb shell input keyevent 82'
-            }
-        }
-        stage('Build and Test') {
-            steps {
-                sh './gradlew clean build connectedAndroidTest'
-            }
-        } */
-
-        stage('TestInstrumented') {
+      /*   stage('TestInstrumented') {
             steps {
                sh "./gradlew connectedDebugAndroidTest --stacktrace --profile"
             }
-        }
+        } */
 
 
                 stage('TestUnit') {
                     steps {
-                       sh "echo testeee"// sh "./gradlew clean jacocoTestReport"
+                       sh "./gradlew clean jacocoTestReport"
                     }
                 }
 
