@@ -42,7 +42,7 @@ pipeline {
 
         stage('Build Prepare') {
            steps {
-               sh "./gradlew clean"
+               sh "./gradlew clean bundleRelease"
            }
         }
 
