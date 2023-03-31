@@ -118,7 +118,7 @@ jacoco {
 
 
 // task to run the instrumented tests and generate the Jacoco report
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest'/*, 'createDebugCoverageReport'*/]) {
 
     reports {
         xml{

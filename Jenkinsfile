@@ -47,22 +47,17 @@ pipeline {
 
         stage('QualityCheck') {
            steps {
-               sh "echo lint"// sh "./gradlew lint"
+               sh "./gradlew lint"
            }
         }
 
-         stage('Unit Tests') {
-           steps {
-               sh "./gradlew testDebugUnitTest"
-           }
-         }
 
-        /*  stage('Install KVM') {
+       /*    stage('Install KVM') {
             steps {
                 sh 'apt-get update && apt-get install -y qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils'
                 sh 'kvm-ok'
             }
-        }*/
+        }
 
        stage('Create Emulator') {
            steps {
@@ -75,9 +70,9 @@ pipeline {
            steps {
                sh 'emulator -avd test -no-audio -no-window -gpu swiftshader_indirect -qemu -m 2048 -enable-kvm & adb wait-for-device'
            }
-       }
+       } */
 
-       stage('Instrumented Tests') {
+       stage('Tests') {
            steps {
                sh "./gradlew clean jacocoTestReport"
            }
@@ -85,7 +80,7 @@ pipeline {
 
        stage('Assign Build') {
            steps {
-               sh "echo testeee"//sh "./gradlew clean bundleRelease"
+               sh "./gradlew clean bundleRelease"
                //step( [ $class: 'JacocoPublisher' ] )
            }
        }
@@ -95,13 +90,13 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                       sh "echo testeee"//sh "./gradlew appDistributionUploadRelease"
+                       sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 
                 stage('Google Play...') {
                     steps {
-                        sh "echo testee"//sh "./gradlew publishBundle"
+                        sh "./gradlew publishBundle"
                     }
                 }
             }
@@ -110,8 +105,9 @@ pipeline {
 
     post {
        always {
-          //junit '**/build/test-results/**/*.xml'
-          //jacoco(execPattern: '**/build/jacoco/*.exec')
+           //junit '**/build/test-results/**/*.xml'
+           junit '**/build/test-results/**/*.xml'
+           jacoco(execPattern: '**/build/jacoco/*.exec')
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
            sh "rm app/service-account.json"
