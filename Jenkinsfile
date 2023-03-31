@@ -54,7 +54,6 @@ pipeline {
 
          stage('Install KVM') {
             steps {
-                sh 'sudo su - root'
                 sh 'apt-get update && apt-get install -y qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils'
                 sh 'kvm-ok'
             }
