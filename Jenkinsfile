@@ -95,14 +95,14 @@ pipeline {
 
         stage('TestInstrumented') {
             steps {
-               sh "./gradlew connectedDebugAndroidTest --debug"
+               sh "./gradlew connectedDebugAndroidTest --stacktrace --profile"
             }
         }
 
 
                 stage('TestUnit') {
                     steps {
-                       sh "echo testee"// sh "./gradlew clean jacocoTestReport"
+                       sh "echo testeee"// sh "./gradlew clean jacocoTestReport"
                     }
                 }
 
