@@ -83,12 +83,12 @@ pipeline {
            }
        }
 
-                   stage('Build') {
-                                    steps {
-                                        sh "echo testee"//sh "./gradlew clean bundleRelease"
-                                        //step( [ $class: 'JacocoPublisher' ] )
-                                    }
-                                }
+       stage('Build') {
+           steps {
+               sh "echo testee"//sh "./gradlew clean bundleRelease"
+               //step( [ $class: 'JacocoPublisher' ] )
+           }
+       }
 
 
         stage('Publish') {
@@ -112,7 +112,6 @@ pipeline {
        always {
           //junit '**/build/test-results/**/*.xml'
           //jacoco(execPattern: '**/build/jacoco/*.exec')
-
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
            sh "rm app/service-account.json"
