@@ -39,7 +39,6 @@ pipeline {
             }
         }
 
-
         stage('Build Prepare') {
            steps {
                sh "./gradlew clean bundleRelease"
@@ -51,6 +50,12 @@ pipeline {
                sh "echo lint"// sh "./gradlew lint"
            }
         }
+
+         stage('Unit Tests') {
+           steps {
+               sh "./gradlew testDebugUnitTest"
+           }
+         }
 
         /*  stage('Install KVM') {
             steps {
@@ -72,18 +77,11 @@ pipeline {
            }
        }
 
-      /*   stage('TestInstrumented') {
-            steps {
-               sh "./gradlew connectedDebugAndroidTest --stacktrace --profile"
-            }
-        } */
-
-
-                stage('TestUnit') {
-                    steps {
-                       sh "./gradlew clean jacocoTestReport"
-                    }
-                }
+       stage('Test') {
+           steps {
+               sh "./gradlew clean jacocoTestReport"
+           }
+       }
 
                    stage('Build') {
                                     steps {
