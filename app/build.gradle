@@ -118,7 +118,7 @@ jacoco {
 
 
 // task to run the instrumented tests and generate the Jacoco report
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest'/*, 'createDebugCoverageReport'*/]) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['test', 'testDebugUnitTest'/*, 'createDebugCoverageReport'*/]) {
 
     reports {
         xml{
@@ -137,10 +137,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest'/*, 'cr
 
     sourceDirectories.from(files([mainSrc]))
     classDirectories.from(files([debugTree]))
-    executionData.from(fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec",
-            "outputs/code-coverage/connected/*coverage.ec"
-    ]))
+    executionData.from(files("${buildDir}/jacoco/testDebugUnitTest.exec"))
 
 /*  def testInstrumentedSrc = "${project.projectDir}/src/androidTest/java"
     def testSrc = "${project.projectDir}/src/test/java"

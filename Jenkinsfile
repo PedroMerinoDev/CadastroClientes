@@ -81,7 +81,7 @@ pipeline {
        stage('Assign Build') {
            steps {
                sh "./gradlew clean bundleRelease"
-               //step( [ $class: 'JacocoPublisher' ] )
+               step( [ $class: 'JacocoPublisher' ] )
            }
        }
 
@@ -90,13 +90,13 @@ pipeline {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
-                       sh "./gradlew appDistributionUploadRelease"
+                       sh "echo teste"//sh "./gradlew appDistributionUploadRelease"
                     }
                 }
 
                 stage('Google Play...') {
                     steps {
-                        sh "./gradlew publishBundle"
+                        sh "echo teste" //sh "./gradlew publishBundle"
                     }
                 }
             }
@@ -105,9 +105,10 @@ pipeline {
 
     post {
        always {
-           //junit '**/build/test-results/**/*.xml'
-           junit '**/build/test-results/**/*.xml'
-           jacoco(execPattern: '**/build/jacoco/*.exec')
+          junit '**/build/test-results/**/*.xml'
+          junit '**/build/reports/lint-results.xml'
+          jacoco(execPattern: '**/build/jacoco/*.exec')
+
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
            sh "rm app/service-account.json"
