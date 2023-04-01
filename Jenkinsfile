@@ -49,7 +49,7 @@ pipeline {
            steps {
                   // Run Lint and analyse the results
                     sh './gradlew lintDebug'
-                    androidLintParser pattern: '**/lint-results-*.xml'
+
            }
         }
 
@@ -108,6 +108,7 @@ pipeline {
        always {
           junit '**/build/reports/*.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
+          step([$class: 'LintPublisher', pattern: 'app/build/outputs/lint-results*.xml'])
           sh "rm app/hello.jks"
           sh "rm app/service-account-firebasedist.json"
           sh "rm app/service-account.json"
