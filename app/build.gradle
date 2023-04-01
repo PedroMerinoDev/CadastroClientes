@@ -74,8 +74,10 @@ android {
         viewBinding true
     }
 
+
     lintOptions {
         xmlReport true
+        warningsAsErrors true
         // Set the path to the output file
         xmlOutput file("${rootDir}/app/build/reports/lint-results.xml")
         // Specify which issues to check for

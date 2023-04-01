@@ -104,7 +104,7 @@ pipeline {
 
     post {
        always {
-          junit '**/build/test-results/**/*.xml'
+          recordIssues enabledForFailure: true, aggregatingResults: true, tools: [androidLintParser(pattern: '**/lint-results-*.xml')]
           junit '**/build/reports/*.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
 
