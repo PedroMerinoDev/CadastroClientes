@@ -47,7 +47,9 @@ pipeline {
 
         stage('QualityCheck') {
            steps {
-                sh "./gradlew lintDebug"
+                  // Run Lint and analyse the results
+                    sh './gradlew lintDebug'
+                    androidLintParser pattern: '**/lint-results-*.xml'
            }
         }
 
@@ -104,13 +106,11 @@ pipeline {
 
     post {
        always {
-          recordIssues enabledForFailure: true, aggregatingResults: true, tools: [androidLintParser(pattern: '**/lint-results-*.xml')]
           junit '**/build/reports/*.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
-
-           sh "rm app/hello.jks"
-           sh "rm app/service-account-firebasedist.json"
-           sh "rm app/service-account.json"
+          sh "rm app/hello.jks"
+          sh "rm app/service-account-firebasedist.json"
+          sh "rm app/service-account.json"
        }
     }
 }
