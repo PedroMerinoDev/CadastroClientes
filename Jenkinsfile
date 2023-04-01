@@ -95,7 +95,7 @@ pipeline {
 
                 stage('Google Play...') {
                     steps {
-                        sh "echo teste" //sh "./gradlew publishBundle"
+                        sh "echo testee" //sh "./gradlew publishBundle"
                     }
                 }
             }
