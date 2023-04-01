@@ -49,7 +49,6 @@ pipeline {
            steps {
                   // Run Lint and analyse the results
                     sh './gradlew lintDebug'
-
            }
         }
 
@@ -106,7 +105,7 @@ pipeline {
 
     post {
        always {
-          junit '**/build/reports/*.xml'
+          junit '**/build/test-results/**/*.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
           step([$class: 'LintPublisher', pattern: 'app/build/outputs/lint-results*.xml'])
           sh "rm app/hello.jks"
