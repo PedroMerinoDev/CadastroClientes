@@ -131,7 +131,7 @@ pipeline {
        always {
           junit '**/build/test-results/**/*.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
-          recordIssues enabledForFailure: true, aggregatingResults: true, tools: [android(pattern: '**/lint-results-*.xml')]
+          recordIssues enabledForFailure: true, aggregatingResults: true, tools: [androidLintParser(pattern: '**/lint-results-*.xml')]
 
           sh "rm app/hello.jks"
           sh "rm app/service-account-firebasedist.json"
