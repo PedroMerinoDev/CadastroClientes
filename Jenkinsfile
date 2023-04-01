@@ -39,18 +39,17 @@ pipeline {
             }
         }
 
-        stage('Build Prepare') {
+        stage('Compile') {
            steps {
-                sh "./gradlew clean"
+                sh "./gradlew compileDebugSources"
            }
         }
 
         stage('QualityCheck') {
            steps {
-                sh "./gradlew lint"
+                sh "./gradlew lintDebug"
            }
         }
-
 
        /*    stage('Install KVM') {
             steps {
@@ -78,14 +77,14 @@ pipeline {
            }
        }
 
-       stage('Assign Build') {
+       stage('Build AAB') {
            steps {
                 sh "echo teste" //sh "./gradlew clean bundleRelease"
            }
        }
 
 
-        stage('Publish') {
+        stage('Deploy') {
             parallel {
                 stage('Firebase Distribution') {
                     steps {
@@ -104,13 +103,12 @@ pipeline {
 
     post {
        always {
-          recordIssues enabledForFailure: true, aggregatingResults: true, tools: [androidLintParser(pattern: '**/lint-results-*.xml')]
           junit '**/build/reports/*.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
-
-           sh "rm app/hello.jks"
-           sh "rm app/service-account-firebasedist.json"
-           sh "rm app/service-account.json"
+          androidLintParser pattern: '**/lint-results-*.xml'
+          sh "rm app/hello.jks"
+          sh "rm app/service-account-firebasedist.json"
+          sh "rm app/service-account.json"
        }
     }
 }
