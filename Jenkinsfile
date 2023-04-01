@@ -51,7 +51,6 @@ pipeline {
            }
         }
 
-
        /*    stage('Install KVM') {
             steps {
                 sh 'apt-get update && apt-get install -y qemu-kvm libvirt-bin ubuntu-vm-builder bridge-utils'
@@ -81,10 +80,8 @@ pipeline {
        stage('Assign Build') {
            steps {
                 sh "echo teste" //sh "./gradlew clean bundleRelease"
-                step( [ $class: 'JacocoPublisher' ] )
            }
        }
-
 
         stage('Publish') {
             parallel {
@@ -107,7 +104,7 @@ pipeline {
        always {
           junit '**/build/test-results/**/*.xml'
           //junit '**/build/reports/lint-results.xml'
-          //jacoco(execPattern: '**/build/jacoco/*.exec')
+          jacoco(execPattern: '**/build/jacoco/*.exec')
 
            sh "rm app/hello.jks"
            sh "rm app/service-account-firebasedist.json"
