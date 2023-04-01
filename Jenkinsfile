@@ -62,6 +62,30 @@ pipeline {
 
        stage('Create Emulator') {
            steps {
+
+           ./gradlew assembleAndroidTest
+           pids=
+           env ANDROID_SERIAL=emulator-5554 ./gradlew \
+               connectedAndroidTest \
+               -Pandroid.testInstrumentationRunnerArguments.numShards=2 \
+               -Pandroid.testInstrumentationRunnerArguments.shardIndex=0 \
+               -PtestReportsDir=build/testReports/shard0 \
+               -PtestResultsDir=build/testResults/shard0 \
+               &
+           pids+=" $!"
+           env ANDROID_SERIAL=emulator-5556 ./gradlew \
+               connectedAndroidTest \
+               -Pandroid.testInstrumentationRunnerArguments.numShards=2 \
+               -Pandroid.testInstrumentationRunnerArguments.shardIndex=1 \
+               -PtestReportsDir=build/testReports/shard1 \
+               -PtestResultsDir=build/testResults/shard1 \
+               &
+           pids+=" $!"
+           wait $pids || { echo "there were errors" >&2; exit 1; }
+           exit 0
+
+
+
                sh 'sdkmanager --install "system-images;android-30;google_apis;x86" "platform-tools" "platforms;android-30" "build-tools;29.0.3"'
                sh 'echo no | avdmanager create avd --name test --package "system-images;android-30;google_apis;x86_64"'
            }
@@ -107,7 +131,8 @@ pipeline {
        always {
           junit '**/build/test-results/**/*.xml'
           jacoco(execPattern: '**/build/jacoco/*.exec')
-          step([$class: 'LintPublisher', pattern: 'app/build/outputs/lint-results*.xml'])
+          recordIssues enabledForFailure: true, aggregatingResults: true, tools: [android(pattern: '**/lint-results-*.xml')]
+
           sh "rm app/hello.jks"
           sh "rm app/service-account-firebasedist.json"
           sh "rm app/service-account.json"
